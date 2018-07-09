@@ -5,7 +5,7 @@ import shutil
 import glob
 import os
 
-NFBIN = 4
+NFBIN = 2
 IFSEL = 1
 FREQ = '7700'
 
@@ -70,14 +70,14 @@ print(gpcal)
 gpboot = mu.mirstr(f'gpboot vis={secondary} cal={primary}').run()
 print(gpboot)
 
-plt = [mu.mirstr(f'uvplt vis={primary} axis=time,amp options=nob,nof stokes=i device=primary_timeamp_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={primary} axis=re,im options=nob,nof,eq stokes=i,q,u,v device=primary_reim_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={primary} axis=uc,vc options=nob,nof stokes=i  device=primary_ucvc_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={primary} axis=freq,amp options=nob,nof stokes=i  device=primary_freqamp_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={secondary} axis=time,amp options=nob,nof stokes=i device=secondary_timeamp_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={secondary} axis=re,im options=nob,nof,eq stokes=i,q,u,v device=secondary_reim_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={secondary} axis=uc,vc options=nob,nof stokes=i  device=secondary_ucvc_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={secondary} axis=freq,amp options=nob,nof stokes=i device=secondary_freqamp_{FREQ}.png/PNG'),
+plt = [mu.mirstr(f'uvplt vis={primary} axis=time,amp options=nob,nof,2pass stokes=i device=primary_timeamp_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={primary} axis=re,im options=nob,nof,eq,2pass stokes=i,q,u,v device=primary_reim_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={primary} axis=uc,vc options=nob,nof,2pass stokes=i  device=primary_ucvc_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={primary} axis=freq,amp options=nob,nof,2pass stokes=i  device=primary_freqamp_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={secondary} axis=time,amp options=nob,nof,2pass stokes=i device=secondary_timeamp_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={secondary} axis=re,im options=nob,nof,eq,2pass stokes=i,q,u,v device=secondary_reim_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={secondary} axis=uc,vc options=nob,nof,2pass stokes=i  device=secondary_ucvc_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={secondary} axis=freq,amp options=nob,nof,2pass stokes=i device=secondary_freqamp_{FREQ}.png/PNG'),
     ]
 
 def run(a):
