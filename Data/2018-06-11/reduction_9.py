@@ -20,8 +20,10 @@ print(atlod)
 # Flag the known bad channels out
 mu.uvflag(atlod.out, mu.flags_9)
 
-print(atlod.out)
-print(type(atlod.out))
+# Block went offline. Flag all the data around this time. Surprised it 
+# took so long to fix up. 
+uvflag = mu.mirstr(f"uvflag vis={atlod.out} select=time(00:25:00,01:50:00) flagval=flag").run()
+print(uvflag)
 
 # Split the data up
 uvsplit = mu.mirstr(f"uvsplit vis={atlod.attribute('out')} options=mosaic").run()
@@ -71,14 +73,14 @@ print(pgflag)
 gpboot = mu.mirstr(f'gpboot vis={secondary} cal={primary}').run()
 print(gpboot)
 
-plt = [mu.mirstr(f'uvplt vis={primary} axis=time,amp options=nob,nof stokes=i device=primary_timeamp_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={primary} axis=re,im options=nob,nof,eq stokes=i,q,u,v device=primary_reim_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={primary} axis=uc,vc options=nob,nof stokes=i  device=primary_ucvc_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={primary} axis=freq,amp options=nob,nof stokes=i  device=primary_freqamp_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={secondary} axis=time,amp options=nob,nof stokes=i device=secondary_timeamp_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={secondary} axis=re,im options=nob,nof,eq stokes=i,q,u,v device=secondary_reim_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={secondary} axis=uc,vc options=nob,nof stokes=i  device=secondary_ucvc_{FREQ}.png/PNG'),
-       mu.mirstr(f'uvplt vis={secondary} axis=freq,amp options=nob,nof stokes=i device=secondary_freqamp_{FREQ}.png/PNG'),
+plt = [mu.mirstr(f'uvplt vis={primary} axis=time,amp options=nob,nof,2pass stokes=i device=primary_timeamp_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={primary} axis=re,im options=nob,nof,eq,2pass stokes=i,q,u,v device=primary_reim_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={primary} axis=uc,vc options=nob,nof,2pass stokes=i  device=primary_ucvc_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={primary} axis=freq,amp options=nob,nof,2pass stokes=i  device=primary_freqamp_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={secondary} axis=time,amp options=nob,nof,2pass stokes=i device=secondary_timeamp_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={secondary} axis=re,im options=nob,nof,eq,2pass stokes=i,q,u,v device=secondary_reim_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={secondary} axis=uc,vc options=nob,nof,2pass stokes=i  device=secondary_ucvc_{FREQ}.png/PNG'),
+       mu.mirstr(f'uvplt vis={secondary} axis=freq,amp options=nob,nof,2pass stokes=i device=secondary_freqamp_{FREQ}.png/PNG'),
     ]
 
 print(plt)
