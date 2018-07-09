@@ -1,1 +1,9 @@
 It seems when using pgflag and flagging with `stokes=i,q,u,v` on the mosaic set of sources (c3171.7700/9500) over 80% of data gets flagged out. Curious as to why.
+
+
+Potentially bad days
+----------------------
+
+2018-06-11
+
+There is a dropped block during this observing block on the 9.5GHz IF. Oddly, I had troubles calibrating the 7.7GHz. GPCAL would not converge to a solution after the flagging on the econdary. I ended up having to set nfbin=2 and also using the reset option in gpcal. But be aware that there may still be some lingering issues as GPBOOT reported 0.84 flux density scalings. Consider revisint this day.
