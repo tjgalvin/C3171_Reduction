@@ -1,0 +1,1 @@
+It seems when using pgflag and flagging with `stokes=i,q,u,v` on the mosaic set of sources (c3171.7700/9500) over 80% of data gets flagged out. Curious as to why.
