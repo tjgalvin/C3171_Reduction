@@ -20,9 +20,6 @@ print(atlod)
 # Flag the known bad channels out
 mu.uvflag(atlod.out, mu.flags_9)
 
-print(atlod.out)
-print(type(atlod.out))
-
 # Split the data up
 uvsplit = mu.mirstr(f"uvsplit vis={atlod.attribute('out')} options=mosaic").run()
 print(uvsplit)
