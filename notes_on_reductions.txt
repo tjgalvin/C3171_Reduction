@@ -7,3 +7,7 @@ Potentially bad days
 2018-06-11
 
 There is a dropped block during this observing block on the 9.5GHz IF. Oddly, I had troubles calibrating the 7.7GHz. GPCAL would not converge to a solution after the flagging on the econdary. I ended up having to set nfbin=2 and also using the reset option in gpcal. But be aware that there may still be some lingering issues as GPBOOT reported 0.84 flux density scalings. Consider revisint this day.
+
+2018-06-08
+
+I thought this had a dropped block, but excluding a single rpfits file made the whole thing goin without issue. Just something to note. If emory serves I stopped the array almost immediately after the block went offfline
