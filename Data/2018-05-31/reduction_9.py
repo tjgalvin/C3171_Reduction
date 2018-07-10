@@ -51,8 +51,9 @@ print(gpcal)
 gpcopy = mu.mirstr(f"gpcopy vis={primary} out={secondary}").run()
 print(gpcopy)
 
-gpcal = mu.mirstr(f"gpcal vis={secondary} options=xyvary,qusolve nfbin={NFBIN} interval=0.1").run()
-print(gpcal)
+# A lot of RFI seems to kill the calibration step. 
+# gpcal = mu.mirstr(f"gpcal vis={secondary} options=xyvary,qusolve nfbin={NFBIN} interval=0.1").run()
+# print(gpcal)
 
 # Automated flagging
 # Automated flagging
@@ -64,6 +65,9 @@ print(pgflag)
 
 pgflag = mu.mirstr(f"pgflag vis={secondary} command='<b' stokes=i,v,u,q flagpar=8,2,2,3,6,3  options=nodisp").run()
 print(pgflag)
+
+gpcal = mu.mirstr(f"gpcal vis={secondary} options=xyvary,qusolve nfbin={NFBIN} interval=0.1").run()
+print(gpcal)
 
 gpboot = mu.mirstr(f'gpboot vis={secondary} cal={primary}').run()
 print(gpboot)
