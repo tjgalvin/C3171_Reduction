@@ -20,6 +20,13 @@ print(atlod)
 # Flag the known bad channels out
 mu.uvflag(atlod.out, mu.flags_9)
 
+# ATCA bug was not recalulatin delays when slewing to new target, or something
+uvflag = mu.mirstr(f"uvflag vis={atlod.out} select='time(07:00:00,07:06:00)' flagval=flag").run()
+print(uvflag)
+
+uvflag = mu.mirstr(f"uvflag vis={atlod.out} select='time(07:20:00,07:24:00)' flagval=flag").run()
+print(uvflag)
+
 # Split the data up
 uvsplit = mu.mirstr(f"uvsplit vis={atlod.attribute('out')} options=mosaic").run()
 print(uvsplit)
@@ -92,6 +99,10 @@ pool = Pool(5)
 result = pool.map(run, plt)
 pool.close()
 pool.join()
+
+
+import sys
+sys.exit()
 
 gpcopy = mu.mirstr(f"gpcopy vis={secondary} out={mosaic}").run()
 print(gpcopy)
