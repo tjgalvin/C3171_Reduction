@@ -20,6 +20,9 @@ print(atlod)
 # Flag the known bad channels out
 mu.uvflag(atlod.out, mu.flags_9)
 
+uvsplit = mu.mirstr(f"uvflag vis={atlod.out} select='time(07:42:00,08:00:00)' flagval=flag").run()
+print(uvsplit)
+
 # Split the data up
 uvsplit = mu.mirstr(f"uvsplit vis={atlod.attribute('out')} options=mosaic").run()
 print(uvsplit)
