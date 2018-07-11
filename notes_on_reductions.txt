@@ -1,5 +1,9 @@
 It seems when using pgflag and flagging with `stokes=i,q,u,v` on the mosaic set of sources (c3171.7700/9500) over 80% of data gets flagged out. Curious as to why.
 
+These data were observed with 50MHz of overlap. The line parameters to access this common information is:
+7700MHz IF - line=chan,50,1900,1,1
+9500MHz IF - line=chan,50,100,1,1
+
 
 Potentially bad days
 ----------------------
