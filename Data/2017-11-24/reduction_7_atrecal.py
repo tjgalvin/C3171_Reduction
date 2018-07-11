@@ -6,22 +6,31 @@ import glob
 import os
 
 NFBIN = 2
-IFSEL = 2
-FREQ = '9500'
+IFSEL = 1
+FREQ = '7700'
 
 primary = f"{mu.primary}.{FREQ}"
 secondary = f"{mu.secondary}.{FREQ}"
 mosaic = f"{mu.science}.{FREQ}"
 
 # Load in the data
-atlod = mu.mirstr(f"atlod in=raw/*C3171 options=rfiflag,birdie,xycorr,noauto,notsys ifsel={IFSEL} out=data{IFSEL}.uv").run()
+atlod = mu.mirstr(f"atlod in=raw/*C3171 options=rfiflag,birdie,xycorr,notsys ifsel={IFSEL} out=data{IFSEL}.uv").run()
 print(atlod)
 
 # Flag the known bad channels out
-mu.uvflag(atlod.out, mu.flags_9)
+mu.uvflag(atlod.attribute('out'), mu.flags_7)
+
+uvflag = mu.mirstr(f"uvflag vis={atlod.out} line=chan,16,1565 flagval=flag").run()
+print(uvflag)
+
+atrecal = mu.mirstr(f"atrecal vis={atlod.out} out={atlod.out}.atrecal").run()
+print(atrecal)
+
+# import sys
+# sys.exit()
 
 # Split the data up
-uvsplit = mu.mirstr(f"uvsplit vis={atlod.attribute('out')} options=mosaic").run()
+uvsplit = mu.mirstr(f"uvsplit vis={atrecal.out} options=mosaic select=-auto").run()
 print(uvsplit)
 
 # Primary calibration
@@ -80,8 +89,6 @@ plt = [mu.mirstr(f'uvplt vis={primary} axis=time,amp options=nob,nof,2pass stoke
        mu.mirstr(f'uvplt vis={secondary} axis=freq,amp options=nob,nof,2pass stokes=i device=secondary_freqamp_{FREQ}.png/PNG'),
     ]
 
-print(plt)
-
 def run(a):
     a.run()
     print(a)
@@ -92,6 +99,9 @@ pool = Pool(5)
 result = pool.map(run, plt)
 pool.close()
 pool.join()
+
+import sys
+sys.exit()
 
 gpcopy = mu.mirstr(f"gpcopy vis={secondary} out={mosaic}").run()
 print(gpcopy)
@@ -105,7 +115,6 @@ print(pgflag)
 
 pgflag = mu.mirstr(f"pgflag vis={mosaic} command='<b' stokes=i,v,u,q flagpar=8,2,2,3,6,3  options=nodisp").run()
 print(pgflag)
-
 
 uvsplit = mu.mirstr(f'uvsplit vis={mosaic}').run()
 print(uvsplit)

@@ -20,8 +20,11 @@ print(atlod)
 # Flag the known bad channels out
 mu.uvflag(atlod.attribute('out'), mu.flags_7)
 
+uvflag = mu.mirstr(f"uvflag vis={atlod.out} line=chan,16,1565 flagval=flag").run()
+print(uvflag)
+
 # Split the data up
-uvsplit = mu.mirstr(f"uvsplit vis={atlod.attribute('out')} options=mosaic").run()
+uvsplit = mu.mirstr(f"uvsplit vis={atlod.out} options=mosaic select=-auto").run()
 print(uvsplit)
 
 # Primary calibration
