@@ -14,7 +14,7 @@ secondary = f"{mu.secondary}.{FREQ}"
 mosaic = f"{mu.science}.{FREQ}"
 
 # Load in the data
-atlod = mu.mirstr(f"atlod in=raw/*C3171 options=rfiflag,birdie,xycorr,noauto ifsel={IFSEL} out=data{IFSEL}.uv").run()
+atlod = mu.mirstr(f"atlod in=raw/*C3171 options=rfiflag,birdie,xycorr,noauto,notsys ifsel={IFSEL} out=data{IFSEL}.uv").run()
 print(atlod)
 
 # Flag the known bad channels out
