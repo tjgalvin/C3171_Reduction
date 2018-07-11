@@ -45,8 +45,13 @@ for day in days:
                 (f'uvplt vis=f{f}/{secondary}.{f} axis=re,im options=nob,nof,eq,2pass stokes=i,q,u,v device=Plots/secondary_reim_{f}.png/PNG', day),
                 (f'uvplt vis=f{f}/{secondary}.{f} axis=uc,vc options=nob,nof,2pass    stokes=i       device=Plots/secondary_ucvc_{f}.png/PNG', day),
                 (f'uvplt vis=f{f}/{secondary}.{f} axis=freq,amp options=nob,nof,2pass stokes=i       device=Plots/secondary_freqamp_{f}.png/PNG', day),
+                (f'uvfmeas vis=f{f}/{secondary}.{f} stokes=i log=Plots/secondary_uvfmeas_{f}_log.txt device=Plots/secondary_uvfmeas_{f}.png/PNG', day),
+              
               ]
             jobs.extend(a)
+
+        jobs.append((f'uvfmeas vis=f{f[0]}/{secondary}.{f[0]},f{f[1]}/{secondary}.{f[1]} stokes=i log=Plots/secondary_uvfmeas_both_log.txt device=Plots/secondary_uvfmeas_both.png/PNG', day))
+
 
 pool = Pool(15)
 result = pool.map(run, jobs)
