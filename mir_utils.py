@@ -44,8 +44,8 @@ class mirstr(str):
             
         return to_print
     
-    def run(self):
-        self.p = sp.run(self.split(), stdout=sp.PIPE, stderr=sp.PIPE)
+    def run(self, *args, **kwargs):
+        self.p = sp.run(self.split(), *args, stdout=sp.PIPE, stderr=sp.PIPE, **kwargs)
         self.p.stdout = self.p.stdout.decode()
         self.p.stderr = self.p.stderr.decode()
         
@@ -54,8 +54,8 @@ class mirstr(str):
         
         return self
     
-    def __call__(self):
-        return self.run()
+    def __call__(self, *args, **kwargs):
+        return self.run(*args, **kwargs)
         
     def attribute(self, key):
         items = self.split()
