@@ -3,6 +3,7 @@
 It assumes that the reduction_7.py and reduction_9.py scripts have run.
 """
 import os
+import sys
 import glob
 import mir_utils as mu
 from multiprocessing import Pool
@@ -26,7 +27,11 @@ secondary = '0327-241'
 freqs = ['7700', '9500']
 
 # Should be OK for the moment. No data in 2020's yet
-days = glob.glob('Data/201*')
+if len(sys.argv) > 1:
+    # Assume user knows what they are doing
+    days = sys.argv[1:]
+else:
+    days = glob.glob('Data/201*')
 
 # Tuple of mirstr task to execute and the cwd to pass
 # to subprocess.run()
