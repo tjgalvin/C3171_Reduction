@@ -43,13 +43,17 @@ for day in days:
         # Should put checks here for appropriate Plot directories
         for f in freqs:
             a =[(f'uvplt vis=f{f}/{primary}.{f}   axis=time,amp options=nob,nof,2pass stokes=i       device=Plots/primary_timeamp_{f}.png/PNG', day),
+                (f'uvplt vis=f{f}/{primary}.{f}   axis=time,amp options=nof,2pass     stokes=i       device=Plots/primary_timeamp_{f}_nxy.png/PNG nxy=4,4', day),
                 (f'uvplt vis=f{f}/{primary}.{f}   axis=re,im options=nob,nof,eq,2pass stokes=i,q,u,v device=Plots/primary_reim_{f}.png/PNG', day),
                 (f'uvplt vis=f{f}/{primary}.{f}   axis=uc,vc options=nob,nof,2pass    stokes=i       device=Plots/primary_ucvc_{f}.png/PNG', day),
                 (f'uvplt vis=f{f}/{primary}.{f}   axis=freq,amp options=nob,nof,2pass stokes=i       device=Plots/primary_freqamp_{f}.png/PNG', day),
+                (f'uvplt vis=f{f}/{primary}.{f}   axis=freq,amp options=nof,2pass     stokes=i       device=Plots/primary_freqamp_{f}_nxy.png/PNG nxy=4,4', day),
                 (f'uvplt vis=f{f}/{secondary}.{f} axis=time,amp options=nob,nof,2pass stokes=i       device=Plots/secondary_timeamp_{f}.png/PNG', day),
+                (f'uvplt vis=f{f}/{secondary}.{f} axis=time,amp options=nof,2pass     stokes=i       device=Plots/secondary_timeamp_{f}_nxy.png/PNG nxy=4,4', day),
                 (f'uvplt vis=f{f}/{secondary}.{f} axis=re,im options=nob,nof,eq,2pass stokes=i,q,u,v device=Plots/secondary_reim_{f}.png/PNG', day),
                 (f'uvplt vis=f{f}/{secondary}.{f} axis=uc,vc options=nob,nof,2pass    stokes=i       device=Plots/secondary_ucvc_{f}.png/PNG', day),
                 (f'uvplt vis=f{f}/{secondary}.{f} axis=freq,amp options=nob,nof,2pass stokes=i       device=Plots/secondary_freqamp_{f}.png/PNG', day),
+                (f'uvplt vis=f{f}/{secondary}.{f} axis=freq,amp options=nof,2pass     stokes=i       device=Plots/secondary_freqamp_{f}_nxy.png/PNG nxy=4,4', day),
                 (f'uvfmeas vis=f{f}/{secondary}.{f} stokes=i log=Plots/secondary_uvfmeas_{f}_log.txt device=Plots/secondary_uvfmeas_{f}.png/PNG', day),
               
               ]

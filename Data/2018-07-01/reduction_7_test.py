@@ -21,7 +21,7 @@ print(atlod)
 mu.uvflag(atlod.attribute('out'), mu.flags_7)
 
 # Recalibrate the Tsys using the common 50MHz
-atrecal = mu.mirstr(f"atrecal vis={atlod.out} out={atlod.out}.atrecal").run()
+atrecal = mu.mirstr(f"atrecal vis={atlod.out} out={atlod.out}.atrecal options=spectrum").run()
 print(atrecal)
 
 # Split the data up
