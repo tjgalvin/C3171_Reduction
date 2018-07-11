@@ -62,7 +62,7 @@ for day in days:
         jobs.append((f'uvfmeas vis=f{freqs[0]}/{secondary}.{freqs[0]},f{freqs[1]}/{secondary}.{freqs[1]} stokes=i log=Plots/secondary_uvfmeas_both_log.txt device=Plots/secondary_uvfmeas_both.png/PNG', day))
 
 
-pool = Pool(32)
+pool = Pool(20)
 result = pool.map(run, jobs)
 pool.close()
 pool.join()
