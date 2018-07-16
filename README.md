@@ -18,3 +18,8 @@ It also implements a class to help run and manage miriad tasks. It subclasses st
 Contains the rpfits file names and their directory structure so that the repository can be regenerated again easily if a complete redownload of raw data is needed. 
 
 
+## model.py 
+
+This suffix on teh reduction_7 and reduction_9 python files will attempt to use the uvfmeas spectrum outputs from the initial calibration to produce a consistent spectrum for the secondary and subsequent science data. 
+
+The `Plots_Model`, `f7700_Model` and `f9500_Model` folders contain the outputs from these processing scripts
