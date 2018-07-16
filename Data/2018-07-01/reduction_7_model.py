@@ -18,7 +18,12 @@ import glob
 import os
 import sys
 
-NFBIN = 4
+# Scaling the IFs to be consistent via a mfflux string only 
+# works when NFBIN = 1. When anything higher is used there
+# is a large offset introduced between the two bands. There
+# might be some rounding effect I haven't been able to pick
+# up on with the reference frequency/flux
+NFBIN = 1
 IFSEL = 1
 FREQ = '7700'
 
@@ -46,8 +51,6 @@ print(mfflux)
 # Primary calibration
 mfcal = mu.mirstr(f'mfcal vis={secondary} flux={mfflux} interval=0.1').run()
 gpcal = mu.mirstr(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} flux={mfflux.split(',')[0]} spec={mfflux.split(',')[1]},{mfflux.split(',')[2]} options=xyvary,qusolve").run()
-# gpcal = mu.mirstr(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} flux={mfflux.split(',')[0]} spec={','.join(mfflux.split(',')[1:])} options=xyvary,qusolve").run()
-# gpcal = mu.mirstr(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} options=xyvary,qusolve").run()
 
 print(mfcal)
 print(gpcal)
@@ -65,8 +68,6 @@ print(pgflag)
 # Primary calibration
 mfcal = mu.mirstr(f'mfcal vis={secondary} flux={mfflux} interval=0.1').run()
 gpcal = mu.mirstr(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} flux={mfflux.split(',')[0]} spec={mfflux.split(',')[1]},{mfflux.split(',')[2]} options=xyvary,qusolve").run()
-# gpcal = mu.mirstr(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} flux={mfflux.split(',')[0]} spec={','.join(mfflux.split(',')[1:])}  options=xyvary,qusolve").run()
-# gpcal = mu.mirstr(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} options=xyvary,qusolve").run()
 
 print(mfcal)
 print(gpcal)
@@ -88,9 +89,6 @@ result = pool.map(run, plt)
 pool.close()
 pool.join()
 
-import sys
-sys.exit()
-
 gpcopy = mu.mirstr(f"gpcopy vis={secondary} out={mosaic}").run()
 print(gpcopy)
 
@@ -109,23 +107,17 @@ print(uvsplit)
 
 # Make output dirs
 try:
-    os.makedirs('Plots')
+    os.makedirs('Plots_Model')
 except Exception as e:
     print(e)
 
 try:
-    os.makedirs('uv')
+    os.makedirs(f'f{FREQ}_Model')
 except Exception as e:
     print(e)
 
-try:
-    os.makedirs(f'f{FREQ}')
-except Exception as e:
-    print(e)
-
-shutil.move(atlod.attribute('out'), 'uv')
 for i in glob.glob(f'*.{FREQ}'):
-    shutil.move(i, f'f{FREQ}')
+    shutil.move(i, f'f{FREQ}_Model')
 
 for i in glob.glob(f'*{FREQ}.png'):
-    shutil.move(i, f'Plots')
+    shutil.move(i, f'Plots_Model')
