@@ -94,6 +94,9 @@ result = pool.map(run, plt)
 pool.close()
 pool.join()
 
+import sys
+sys.exit()
+
 gpcopy = mu.mirstr(f"gpcopy vis={secondary} out={mosaic}").run()
 print(gpcopy)
 
