@@ -44,6 +44,16 @@ uv = f'uv/data{IFSEL}.uv'
 uvsplit = mu.mirstr(f"uvsplit vis={uv} options=mosaic").run()
 print(uvsplit)
 
+# Automated flagging, extra flagging. Without mfcal/gpcal didnt seem to converge
+pgflag = mu.mirstr(f"pgflag vis={secondary} command='<b' stokes=i,q,u,v flagpar=8,5,5,3,6,3 options=nodisp").run()
+print(pgflag)
+
+pgflag = mu.mirstr(f"pgflag vis={secondary} command='<b' stokes=i,v,q,u flagpar=8,2,2,3,6,3  options=nodisp").run()
+print(pgflag)
+
+pgflag = mu.mirstr(f"pgflag vis={secondary} command='<b' stokes=i,v,u,q flagpar=8,2,2,3,6,3  options=nodisp").run()
+print(pgflag)
+
 sec_model = mu.model_secondary()
 mfflux = mu.mfcal_flux(sec_model, ifcal=2)
 
