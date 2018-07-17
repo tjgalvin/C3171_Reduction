@@ -23,3 +23,5 @@ Contains the rpfits file names and their directory structure so that the reposit
 This suffix on teh reduction_7 and reduction_9 python files will attempt to use the uvfmeas spectrum outputs from the initial calibration to produce a consistent spectrum for the secondary and subsequent science data. 
 
 The `Plots_Model`, `f7700_Model` and `f9500_Model` folders contain the outputs from these processing scripts
+
+I am almost certain that these are not the correct way to reduce the data. I think in principal the idea of calibrating via a model of the secondary is OK, the only way I was able to get it to calibrate well was to specify NFBIN=1. I am not sure if this is really the right thing to do over a large bandwidth. The leakages are frequency dependent which this is not really handling. When NFBIN>1, the spectrum would not line up between the two IFs, even though they reference frequency and normalisation was set so they would. There may be something I am not seeing in the use of a flux model in gpcal, and the reference frequency is being set incorrectly. Will revisit this at some point.  
