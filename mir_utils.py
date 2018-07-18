@@ -6,6 +6,10 @@ from scipy.optimize import curve_fit
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import pymir as m
+
+# Added the mirstr as a package from github tjgalvin
+mirstr = m.mirstr
 
 primary = '1934-638'
 secondary = '0327-241'
@@ -112,61 +116,58 @@ def model_secondary(plot=False, nu_0=8.6):
 # Miriad utility class
 # -------------------------------------------------------------------
 
+# Commented out until knows the new pymir import works
+# class mirstr(str):
+#     """Class to run a miriad task as a method call. Uses str as a base
+#     to make string printing easier. 
 
-class mirstr(str):
-    """Class to run a miriad task as a method call. Uses str as a base
-    to make string printing easier. 
-
-    TODO: make str addition i.e. a + b return a mirstr instance.
-    """
-    def __init__(self, *args, **kwargs):
-        self.p = None
+#     TODO: make str addition i.e. a + b return a mirstr instance.
+#     """
+#     def __init__(self, *args, **kwargs):
+#         self.p = None
     
-    def __str__(self):
-        to_print = self
+#     def __str__(self):
+#         to_print = self
         
-        if self.p is not None:
-            to_print += self.p.stdout
+#         if self.p is not None:
+#             to_print += self.p.stdout
             
-        return to_print
+#         return to_print
     
-    def run(self, *args, **kwargs):
-        self.p = sp.run(self.split(), *args, stdout=sp.PIPE, stderr=sp.PIPE, **kwargs)
-        self.p.stdout = self.p.stdout.decode()
-        self.p.stderr = self.p.stderr.decode()
+#     def run(self, *args, **kwargs):
+#         self.p = sp.run(self.split(), *args, stdout=sp.PIPE, stderr=sp.PIPE, **kwargs)
+#         self.p.stdout = self.p.stdout.decode()
+#         self.p.stderr = self.p.stderr.decode()
         
-        if self.p.returncode:
-            raise ValueError(self.p.stderr)
+#         if self.p.returncode:
+#             raise ValueError(self.p.stderr)
         
-        return self
+#         return self
     
-    def __call__(self, *args, **kwargs):
-        return self.run(*args, **kwargs)
+#     def __call__(self, *args, **kwargs):
+#         return self.run(*args, **kwargs)
         
-    def attribute(self, key):
-        items = self.split()
-        for i in items:
-            if f"{key}=" in i:
-                return i.split('=')[1]
+#     def attribute(self, key):
+#         items = self.split()
+#         for i in items:
+#             if f"{key}=" in i:
+#                 return i.split('=')[1]
         
-        return None
+#         return None
 
-    def __getattr__(self, name):
-        """Assume this is miriad task related. It can be expanded further if
-        needed to include header look ups, I guess. 
+#     def __getattr__(self, name):
+#         """Assume this is miriad task related. It can be expanded further if
+#         needed to include header look ups, I guess. 
         
-        Arguments:
-            name {str} -- attribute from the miriad process str
-        """
-        try:
-            val = self.attribute(name)
-            if val is not None:
-                return val
+#         Arguments:
+#             name {str} -- attribute from the miriad process str
+#         """
+#         try:
+#             val = self.attribute(name)
+#             if val is not None:
+#                 return val
             
-            raise AttributeError(name)
+#             raise AttributeError(name)
 
-        except:
-            raise AttributeError(name)
-
-
-
+#         except:
+#             raise AttributeError(name)
