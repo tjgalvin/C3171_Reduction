@@ -6,10 +6,15 @@ from scipy.optimize import curve_fit
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import pymir as m
+import pymir as pymir
+from pymir import mirstr as m
+from astropy.time import Time
+import astropy.units as u
+import os
 
 # Added the mirstr as a package from github tjgalvin
-mirstr = m.mirstr
+# Hack until reduction scripts are updated
+mirstr = pymir.mirstr
 
 primary = '1934-638'
 secondary = '0327-241'
@@ -22,9 +27,6 @@ flags_7 = {'chan_start':[7866-chan_ref_7, 8058-chan_ref_7, 8177-chan_ref_7, 7747
 flags_9 = {'chan_start':[850],
            'chan_end'  :[900]}
 
-# -------------------------------------------------------------------
-# Utility functions to use throughout reduction
-# -------------------------------------------------------------------
 
 def uvflag(vis, flag_def):
     if len(flag_def['chan_start']) != len(flag_def['chan_end']):
@@ -109,65 +111,53 @@ def model_secondary(plot=False, nu_0=8.6):
     
     return (fit7[0], fit9[0], nu_0, fact)
 
-# -------------------------------------------------------------------
 
-
-# -------------------------------------------------------------------
-# Miriad utility class
-# -------------------------------------------------------------------
-
-# Commented out until knows the new pymir import works
-# class mirstr(str):
-#     """Class to run a miriad task as a method call. Uses str as a base
-#     to make string printing easier. 
-
-#     TODO: make str addition i.e. a + b return a mirstr instance.
-#     """
-#     def __init__(self, *args, **kwargs):
-#         self.p = None
+def flag_cycle(s: pd.Series, selection: str='flagging.txt', delta: int=2):
+    """Construct a miriad selection time() statement to flag out a integration cycle
+    assuming a `cain cycle` of 10
     
-#     def __str__(self):
-#         to_print = self
-        
-#         if self.p is not None:
-#             to_print += self.p.stdout
-            
-#         return to_print
+    Arguments:
+        s {pd.Series} -- A row of a pandas dataframe produced using `uvdump`
     
-#     def run(self, *args, **kwargs):
-#         self.p = sp.run(self.split(), *args, stdout=sp.PIPE, stderr=sp.PIPE, **kwargs)
-#         self.p.stdout = self.p.stdout.decode()
-#         self.p.stderr = self.p.stderr.decode()
-        
-#         if self.p.returncode:
-#             raise ValueError(self.p.stderr)
-        
-#         return self
+    Keyword Arguments:
+        selection {str} -- The file to place select time()'s into (default: {'flagging.txt'})
+        delta {int} -- Time range to flag around (default: {5})
+    """
+
+    t1 = (Time(s['time'], format='jd')-delta*u.second).datetime.strftime('%y%b%d:%H:%M:%S')
+    t2 = (Time(s['time'], format='jd')+delta*u.second).datetime.strftime('%y%b%d:%H:%M:%S')
     
-#     def __call__(self, *args, **kwargs):
-#         return self.run(*args, **kwargs)
-        
-#     def attribute(self, key):
-#         items = self.split()
-#         for i in items:
-#             if f"{key}=" in i:
-#                 return i.split('=')[1]
-        
-#         return None
+    select = f"time({t1},{t2})"
+    
+    with open(selection, 'a') as out_file:
+        print(select, file=out_file)
+    
 
-#     def __getattr__(self, name):
-#         """Assume this is miriad task related. It can be expanded further if
-#         needed to include header look ups, I guess. 
-        
-#         Arguments:
-#             name {str} -- attribute from the miriad process str
-#         """
-#         try:
-#             val = self.attribute(name)
-#             if val is not None:
-#                 return val
-            
-#             raise AttributeError(name)
+def flag_inttime(uv: str, threshold: int=9, logfile: str='dump.txt', selection: str='flagging.txt', 
+                 delete: bool=False):
+    """Flag out short integration cycles from a uv-file
+    
+    Arguments:
+        uv {str} -- uv-file to flag
+    
+    Keyword Arguments:
+        threshold {int} -- Minimum length of time for each cycle (default: {9})
+        logfile {str} -- File to `uvdump` to (default: {'dump.txt'})
+        selection {str} -- File to place select statements in (default: {'flagging.txt'})
+        delete {bool} -- Clean up log files (default: {False})
+    """
 
-#         except:
-#             raise AttributeError(name)
+    uvdump = m(f"uvdump vis={uv} vars=inttime,ant1,ant2,time,source log={logfile}").run()
+    print(uvdump)
+    
+    var = pd.read_csv(logfile, names=('inttime','ant1','ant2','time','source'))
+    var = var[(var['ant1'].values==1)&(var['ant2'].values==2)] # Smaller list of selects
+    
+    var[var['inttime']<threshold].apply(flag_cycle, axis=1, selection=selection)
+    
+    uvflag = m(f"uvflag vis={uv} select=@{selection} flagval=flag").run()
+    print(uvflag)
+    
+    if delete:
+        os.remove(logfile)
+        os.remove(selection)        
