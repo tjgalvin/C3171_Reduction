@@ -7,7 +7,7 @@ This is to look at the calibration results of the notsys reduction strategy.
 import os
 import sys
 import glob
-import mir_utils as mu
+import pymir as mu
 from multiprocessing import Pool
 
 def run(s):
