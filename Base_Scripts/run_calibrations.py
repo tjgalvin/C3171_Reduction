@@ -10,13 +10,15 @@ from multiprocessing import Pool
 import subprocess as sp
 
 def run(s):
-    """Function to create mirstr and run
+    """Function to call python calibration script
     
     Arguments:
-        s {tuple} -- Element one is the miriad task to execute and
+        s {tuple} -- Element one is the calibration script
                      the second is the working directory to execute in
     """
-    sp.run(s[0].split(), cwd=s[1])
+    p = sp.run(s[0].split(), cwd=s[1])
+    print(p.stdout.decode())
+    print(p.stderr.decode())
 
 # Should be OK for the moment. No data in 2020's yet
 if len(sys.argv) > 1:
