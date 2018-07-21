@@ -35,7 +35,7 @@ print(mfcal)
 print(gpcal)
 
 # Automated flagging
-pgflag = mu.mirstr(f"pgflag vis={primary} command='<b' stokes=i,q,u,v flagpar=8,5,5,3,6,3 options=nodisp").run()
+pgflag = mu.mirstr(f"pgflag vis={primary} command='<b' stokes=i,q,u,v flagpar=8,5,0,3,6,3 options=nodisp").run()
 print(pgflag)
 
 pgflag = mu.mirstr(f"pgflag vis={primary} command='<b' stokes=i,v,q,u flagpar=8,2,2,3,6,3  options=nodisp").run()
@@ -58,7 +58,7 @@ gpcal = mu.mirstr(f"gpcal vis={secondary} options=xyvary,qusolve nfbin={NFBIN} i
 print(gpcal)
 
 # Automated flagging
-pgflag = mu.mirstr(f"pgflag vis={secondary} command='<b' stokes=i,q,u,v flagpar=8,5,5,3,6,3 options=nodisp").run()
+pgflag = mu.mirstr(f"pgflag vis={secondary} command='<b' stokes=i,q,u,v flagpar=8,5,0,3,6,3 options=nodisp").run()
 print(pgflag)
 
 pgflag = mu.mirstr(f"pgflag vis={secondary} command='<b' stokes=i,v,q,u flagpar=8,2,2,3,6,3  options=nodisp").run()
