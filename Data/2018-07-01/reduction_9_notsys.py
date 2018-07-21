@@ -23,7 +23,6 @@ mu.uvflag(atlod.out, mu.flags_9)
 # Drop the first integration cycle is less then 8 seconds
 mu.flag_inttime(atlod.out, threshold=8, logfile='dump9.txt', delete=True, selection='flagging9.txt')
 
-
 # Split the data up
 uvsplit = mu.mirstr(f"uvsplit vis={atlod.out} options=mosaic").run()
 print(uvsplit)
@@ -99,8 +98,8 @@ gpcopy = mu.mirstr(f"gpcopy vis={secondary} out={mosaic}").run()
 print(gpcopy)
 
 # Automated flagging
-# pgflag = mu.mirstr(f"pgflag vis={mosaic} command='<b' stokes=i,q,u,v flagpar=8,5,5,3,6,3 options=nodisp").run()
-# print(pgflag)
+pgflag = mu.mirstr(f"pgflag vis={mosaic} command='<b' stokes=i,q,u,v flagpar=8,5,0,3,6,3 options=nodisp").run()
+print(pgflag)
 
 pgflag = mu.mirstr(f"pgflag vis={mosaic} command='<b' stokes=i,v,q,u flagpar=8,2,0,3,6,3  options=nodisp").run()
 print(pgflag)
