@@ -1,6 +1,8 @@
 """Script to batch run calibration scripts across all days. 
 
 At this point requires some manual tweaking to run on a specific script type
+
+Need to add option to handle this. 
 """
 import os
 import sys
@@ -32,14 +34,14 @@ else:
 jobs = []
 
 for day in days:
-    a =[("python3 reduction_7_notsys.py", day),
-        ("python3 reduction_9_notsys.py", day)
+    a =[("python3 reduction_7_model.py", day),
+        ("python3 reduction_9_model.py", day)
         ]
     jobs.extend(a)
 
 
 
-pool = Pool(12)
+pool = Pool(14)
 result = pool.map(run, jobs)
 pool.close()
 pool.join()
