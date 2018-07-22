@@ -1,4 +1,4 @@
-    """Script to reduce data from C3171 data
+"""Script to reduce data from C3171 data
 """
 import mir_utils as mu 
 import shutil
