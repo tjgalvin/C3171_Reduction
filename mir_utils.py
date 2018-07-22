@@ -76,8 +76,8 @@ def model_secondary(plot=False, nu_0=8.6):
     initial calibration
     """
 
-    df7 = pd.read_csv(f'Plots/secondary_uvfmeas_7700_log.txt', names=('nu','s_nu','s_model'), delim_whitespace=True)
-    df9 = pd.read_csv(f'Plots/secondary_uvfmeas_9500_log.txt', names=('nu','s_nu','s_model'), delim_whitespace=True)
+    df7 = pd.read_csv(f'Plots_notsys/secondary_uvfmeas_7700_log.txt', names=('nu','s_nu','s_model'), delim_whitespace=True)
+    df9 = pd.read_csv(f'Plots_notsys/secondary_uvfmeas_9500_log.txt', names=('nu','s_nu','s_model'), delim_whitespace=True)
     
     nu7, snu7 = np.log10(df7['nu'].values/nu_0), np.log10(df7['s_nu'].values)
     nu9, snu9 = np.log10(df9['nu'].values/nu_0), np.log10(df9['s_nu'].values)
