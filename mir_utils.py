@@ -250,12 +250,12 @@ def mv_uv(mode:str):
 
         
         # Move the ifsel2 source files
-    if not os.path.exists(f'Plots_Test{suffix}'):
-        os.mkdir(f'Plots_Test{suffix}')
+    if not os.path.exists(f'Plots{suffix}'):
+        os.mkdir(f'Plots{suffix}')
     for uv in glob('*.png'):
-        su.move(uv, f'Plots_Test{suffix}')
+        su.move(uv, f'Plots{suffix}')
     for txt in glob('*.txt'):
-        su.move(txt, f'Plots_Test{suffix}')
+        su.move(txt, f'Plots{suffix}')
 
 # -----------------------------------------------------------------------------
 
