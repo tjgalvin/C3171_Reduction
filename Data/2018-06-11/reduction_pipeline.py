@@ -41,6 +41,12 @@ for index, freq in enumerate(FREQS):
     else:
         mu.uvflag(atlod.out, mu.flags_9)
 
+    # Block went offline. Flag all the data around this time. Surprised it 
+    # took so long to fix up. 
+    uvflag = m(f"uvflag vis={atlod.out} select=time(00:25:00,01:50:00) "\
+               f"flagval=flag").run()
+    logger.log(logging.INFO, uvflag)
+
     # Split the data up
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic "\
                 f"select=source({mu.primary}),source({mu.secondary})").run()
@@ -126,6 +132,12 @@ for index, freq in enumerate(FREQS):
         mu.uvflag(atlod.out, mu.flags_7)
     else:
         mu.uvflag(atlod.out, mu.flags_9)
+
+    # Block went offline. Flag all the data around this time. Surprised it 
+    # took so long to fix up. 
+    uvflag = m(f"uvflag vis={atlod.out} select=time(00:25:00,01:50:00) "\
+               f"flagval=flag").run()
+    logger.log(logging.INFO, uvflag)
 
     # Split the data up
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic ").run()

@@ -41,6 +41,13 @@ for index, freq in enumerate(FREQS):
     else:
         mu.uvflag(atlod.out, mu.flags_9)
 
+    # ATCA bug was not recalulatin delays when slewing to new target, or something
+    uvflag = m(f"uvflag vis={atlod.out} select='time(07:00:00,07:06:00)' flagval=flag").run()
+    logger.log(logging.INFO, uvflag)
+
+    uvflag = m(f"uvflag vis={atlod.out} select='time(07:20:00,07:24:00)' flagval=flag").run()
+    logger.log(logging.INFO, uvflag)
+
     # Split the data up
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic "\
                 f"select=source({mu.primary}),source({mu.secondary})").run()
@@ -126,6 +133,13 @@ for index, freq in enumerate(FREQS):
         mu.uvflag(atlod.out, mu.flags_7)
     else:
         mu.uvflag(atlod.out, mu.flags_9)
+
+    # ATCA bug was not recalulatin delays when slewing to new target, or something
+    uvflag = m(f"uvflag vis={atlod.out} select='time(07:00:00,07:06:00)' flagval=flag").run()
+    logger.log(logging.INFO, uvflag)
+
+    uvflag = m(f"uvflag vis={atlod.out} select='time(07:20:00,07:24:00)' flagval=flag").run()
+    logger.log(logging.INFO, uvflag)
 
     # Split the data up
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic ").run()
