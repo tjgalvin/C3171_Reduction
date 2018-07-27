@@ -13,6 +13,10 @@ import astropy.units as u
 import os
 import shutil as su
 
+# Get default logger set up in the reduction pipeline
+import logging
+logger = logging.getLogger()
+
 # Added the mirstr as a package from github tjgalvin
 # Hack until reduction scripts are updated
 mirstr = pymir.mirstr
@@ -39,9 +43,8 @@ def uvflag(vis, flag_def):
         
     for start, end in zip(flag_def['chan_start'], flag_def['chan_end']):
         line = f"chan,{end-start},{start},1"
-        print(line)
         proc = mirstr(f"uvflag vis={vis} line={line} flagval=flag").run()
-        print(proc)
+        logger.log(logging.INFO, proc)
 
 
 def calibrator_pgflag(src):
@@ -53,13 +56,13 @@ def calibrator_pgflag(src):
     """
     # Automated flagging
     pgflag = m(f"pgflag vis={src} command='<b' stokes=i,q,u,v flagpar=8,5,5,3,6,3 options=nodisp").run()
-    print(pgflag)
+    logger.log(logging.INFO, pgflag)
 
     pgflag = m(f"pgflag vis={src} command='<b' stokes=i,v,q,u flagpar=8,2,2,3,6,3  options=nodisp").run()
-    print(pgflag)
+    logger.log(logging.INFO, pgflag)
 
     pgflag = m(f"pgflag vis={src} command='<b' stokes=i,v,u,q flagpar=8,2,2,3,6,3  options=nodisp").run()
-    print(pgflag)
+    logger.log(logging.INFO, pgflag)
 
 
 def mosaic_pgflag(src):
@@ -70,11 +73,11 @@ def mosaic_pgflag(src):
     """
     pgflag = m(f"pgflag vis={src} command='<b' stokes=i,v,q,u flagpar=8,2,2,3,6,3  "\
                f"options=nodisp").run()
-    print(pgflag)
+    logger.log(logging.INFO, pgflag)
 
     pgflag = m(f"pgflag vis={src} command='<b' stokes=i,v,u,q flagpar=8,2,2,3,6,3  "\
                f"options=nodisp").run()
-    print(pgflag)
+    logger.log(logging.INFO, pgflag)
 
 
 def flag_cycle(s: pd.Series, selection: str='flagging.txt', delta: int=2):

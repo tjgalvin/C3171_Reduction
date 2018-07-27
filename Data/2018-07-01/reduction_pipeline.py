@@ -1,13 +1,25 @@
 import mir_utils as mu
 from pymir import mirstr as m
 from multiprocessing import Pool
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s",
+    level=logging.INFO,
+    handlers=[
+        logging.FileHandler("calibration_pipline.log", mode='w'),
+        logging.StreamHandler()
+    ])
+
+logger = logging.getLogger()
+
 
 NFBIN = 2
 FREQS = ['7700', '9500']
 
 def run(a):
     a.run()
-    print(a)
+    logger.log(logging.INFO, a)
 
 
 # Initial pass of the data loads in without the Tsys correction to produce a
@@ -21,7 +33,7 @@ for index, freq in enumerate(FREQS):
     # Load in the data
     atlod = m(f"atlod in=raw/*C3171 options=notsys,rfiflag,birdie,xycorr,noauto "\
               f"ifsel={ifsel} out=data{ifsel}.uv").run()
-    print(atlod)
+    logger.log(logging.INFO, atlod)
 
     # Flag the known bad channels out
     if ifsel == 1:
@@ -32,13 +44,13 @@ for index, freq in enumerate(FREQS):
     # Split the data up
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic "\
                 f"select=source({mu.primary}),source({mu.secondary})").run()
-    print(uvsplit)
+    logger.log(logging.INFO, uvsplit)
 
     mfcal = m(f"mfcal vis={primary} interval=0.1").run()
     gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary").run()
-    print(mfcal)
-    print(gpcal)
+    logger.log(logging.INFO, mfcal)
+    logger.log(logging.INFO, gpcal)
 
     mu.calibrator_pgflag(primary)
 
@@ -46,24 +58,24 @@ for index, freq in enumerate(FREQS):
     mfcal = m(f"mfcal vis={primary} interval=0.1").run()
     gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary").run()
-    print(mfcal)
-    print(gpcal)
+    logger.log(logging.INFO, mfcal)
+    logger.log(logging.INFO, gpcal)
 
     gpcopy = m(f"gpcopy vis={primary} out={secondary}").run()
-    print(gpcopy)
+    logger.log(logging.INFO, gpcopy)
 
     gpcal = m(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary,qusolve").run()
-    print(gpcal)
+    logger.log(logging.INFO, gpcal)
 
     mu.calibrator_pgflag(secondary)
 
     gpcal = m(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary,qusolve").run()
-    print(gpcal)
+    logger.log(logging.INFO, gpcal)
 
     gpboot = m(f"gpboot vis={secondary} cal={primary}").run()
-    print(gpboot)
+    logger.log(logging.INFO, gpboot)
 
     plt = [m(f'uvplt vis={primary} axis=time,amp options=nob,nof stokes=i device=primary_timeamp_{freq}.png/PNG'),
            m(f'uvplt vis={primary} axis=re,im options=nob,nof,eq stokes=i,q,u,v device=primary_reim_{freq}.png/PNG'),
@@ -82,7 +94,7 @@ for index, freq in enumerate(FREQS):
 uvfmeas = m(f"uvfmeas vis={','.join([f'{mu.secondary}.{freq}' for freq in FREQS])} "\
             f"stokes=i log=secondary_uvfmeas_both_log.txt "\
             f"device=secondary_uvfmeas_both.png/PNG").run()
-print(uvfmeas)
+logger.log(logging.INFO, uvfmeas)
 
 # import sys
 # sys.exit()
@@ -107,7 +119,7 @@ for index, freq in enumerate(FREQS):
     # Load in the data
     atlod = m(f"atlod in=raw/*C3171 options=rfiflag,birdie,xycorr,noauto "\
               f"ifsel={ifsel} out=data{ifsel}.uv").run()
-    print(atlod)
+    logger.log(logging.INFO, atlod)
 
     # Flag the known bad channels out
     if ifsel == 1:
@@ -117,14 +129,14 @@ for index, freq in enumerate(FREQS):
 
     # Split the data up
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic ").run()
-    print(uvsplit)
+    logger.log(logging.INFO, uvsplit)
 
     # Calibrate the secondary using the flux reference model
     mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1").run()
     gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
                "options=xyvary,qusolve").run()
-    print(mfcal)
-    print(gpcal)
+    logger.log(logging.INFO, mfcal)
+    logger.log(logging.INFO, gpcal)
 
     mu.calibrator_pgflag(secondary)
 
@@ -132,8 +144,8 @@ for index, freq in enumerate(FREQS):
     mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1").run()
     gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
                "options=xyvary,qusolve").run()
-    print(mfcal)
-    print(gpcal)
+    logger.log(logging.INFO, mfcal)
+    logger.log(logging.INFO, gpcal)
 
     mfboot = m(f"mfboot vis={secondary} select=source({mu.secondary}) "\
                f"flux={mfflux}").run()
@@ -150,17 +162,17 @@ for index, freq in enumerate(FREQS):
     pool.join()
 
     gpcopy = m(f"gpcopy vis={secondary} out={mosaic}").run()
-    print(gpcopy)
+    logger.log(logging.INFO, gpcopy)
 
     # Flag the actual science data
     mu.mosaic_pgflag(mosaic)
 
     uvsplit = m(f"uvsplit vis={mosaic}").run()
-    print(uvsplit)
+    logger.log(logging.INFO, uvsplit)
 
 uvfmeas = m(f"uvfmeas vis={','.join([f'{mu.secondary}.{freq}' for freq in FREQS])} "\
             f"stokes=i log=secondary_uvfmeas_both_log.txt "\
             f"device=secondary_uvfmeas_both.png/PNG").run()
-print(uvfmeas)
+logger.log(logging.INFO, uvfmeas)
 
 mu.mv_uv('normal')
