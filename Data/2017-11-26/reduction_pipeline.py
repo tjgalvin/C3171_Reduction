@@ -46,17 +46,13 @@ for index, freq in enumerate(FREQS):
                 f"select=source({mu.primary}),source({mu.secondary})").run()
     logger.log(logging.INFO, uvsplit)
 
-    mu.calibrator_pgflag(primary)
-
-    mfcal = m(f"mfcal vis={primary} interval=0.1").run()
+    mfcal = m(f"mfcal vis={primary} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary").run()
     logger.log(logging.INFO, mfcal)
     logger.log(logging.INFO, gpcal)
 
-    mu.calibrator_pgflag(primary)
-
-    mfcal = m(f"mfcal vis={primary} interval=0.1").run()
+    mfcal = m(f"mfcal vis={primary} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary").run()
     logger.log(logging.INFO, mfcal)
@@ -64,8 +60,6 @@ for index, freq in enumerate(FREQS):
 
     gpcopy = m(f"gpcopy vis={primary} out={secondary}").run()
     logger.log(logging.INFO, gpcopy)
-
-    mu.calibrator_pgflag(secondary)
 
     gpcal = m(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary,qusolve").run()
@@ -99,9 +93,6 @@ uvfmeas = m(f"uvfmeas vis={','.join([f'{mu.secondary}.{freq}' for freq in FREQS]
             f"device=secondary_uvfmeas_both.png/PNG").run()
 logger.log(logging.INFO, uvfmeas)
 
-# import sys
-# sys.exit()
-
 # Acquire information of the fit to the model of secondary
 fit_pack = mu.model_secondary(if1='secondary_uvfmeas_7700_log.txt',
                               if2='secondary_uvfmeas_9500_log.txt')
@@ -134,10 +125,8 @@ for index, freq in enumerate(FREQS):
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic ").run()
     logger.log(logging.INFO, uvsplit)
 
-    mu.calibrator_pgflag(secondary)
-
     # Calibrate the secondary using the flux reference model
-    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1").run()
+    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
                "options=xyvary,qusolve").run()
     logger.log(logging.INFO, mfcal)

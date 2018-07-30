@@ -53,7 +53,7 @@ for index, freq in enumerate(FREQS):
                 f"select=source({mu.primary}),source({mu.secondary})").run()
     logger.log(logging.INFO, uvsplit)
 
-    mfcal = m(f"mfcal vis={primary} interval=0.1").run()
+    mfcal = m(f"mfcal vis={primary} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary").run()
     logger.log(logging.INFO, mfcal)
@@ -61,8 +61,7 @@ for index, freq in enumerate(FREQS):
 
     mu.calibrator_pgflag(primary)
 
-
-    mfcal = m(f"mfcal vis={primary} interval=0.1").run()
+    mfcal = m(f"mfcal vis={primary} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary").run()
     logger.log(logging.INFO, mfcal)
@@ -146,7 +145,7 @@ for index, freq in enumerate(FREQS):
     logger.log(logging.INFO, uvsplit)
 
     # Calibrate the secondary using the flux reference model
-    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1").run()
+    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
                "options=xyvary,qusolve").run()
     logger.log(logging.INFO, mfcal)
@@ -155,7 +154,7 @@ for index, freq in enumerate(FREQS):
     mu.calibrator_pgflag(secondary)
 
     # Calibrate the secondary using the flux reference model
-    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1").run()
+    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
                "options=xyvary,qusolve").run()
     logger.log(logging.INFO, mfcal)
@@ -163,7 +162,7 @@ for index, freq in enumerate(FREQS):
 
     mfboot = m(f"mfboot vis={secondary} select=source({mu.secondary}) "\
                f"flux={mfflux}").run()
-    print(mfboot)
+    logger.log(logging.INFO, mfboot)
 
     plt = [m(f'uvplt vis={secondary} axis=time,amp options=nob,nof stokes=i device=secondary_timeamp_{freq}.png/PNG'),
            m(f'uvplt vis={secondary} axis=re,im options=nob,nof,eq stokes=i,q,u,v device=secondary_reim_{freq}.png/PNG'),
