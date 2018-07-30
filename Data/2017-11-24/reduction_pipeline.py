@@ -46,6 +46,8 @@ for index, freq in enumerate(FREQS):
                 f"select=source({mu.primary}),source({mu.secondary})").run()
     logger.log(logging.INFO, uvsplit)
 
+    mu.calibrator_pgflag(primary)
+
     mfcal = m(f"mfcal vis={primary} interval=0.1").run()
     gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary").run()
@@ -53,7 +55,6 @@ for index, freq in enumerate(FREQS):
     logger.log(logging.INFO, gpcal)
 
     mu.calibrator_pgflag(primary)
-
 
     mfcal = m(f"mfcal vis={primary} interval=0.1").run()
     gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
@@ -63,6 +64,8 @@ for index, freq in enumerate(FREQS):
 
     gpcopy = m(f"gpcopy vis={primary} out={secondary}").run()
     logger.log(logging.INFO, gpcopy)
+
+    mu.calibrator_pgflag(secondary)
 
     gpcal = m(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary,qusolve").run()
@@ -131,6 +134,8 @@ for index, freq in enumerate(FREQS):
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic ").run()
     logger.log(logging.INFO, uvsplit)
 
+    mu.calibrator_pgflag(secondary)
+
     # Calibrate the secondary using the flux reference model
     mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1").run()
     gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
@@ -149,7 +154,7 @@ for index, freq in enumerate(FREQS):
 
     mfboot = m(f"mfboot vis={secondary} select=source({mu.secondary}) "\
                f"flux={mfflux}").run()
-    print(mfboot)
+    logger.log(logging.INFO, mfboot)
 
     plt = [m(f'uvplt vis={secondary} axis=time,amp options=nob,nof stokes=i device=secondary_timeamp_{freq}.png/PNG'),
            m(f'uvplt vis={secondary} axis=re,im options=nob,nof,eq stokes=i,q,u,v device=secondary_reim_{freq}.png/PNG'),
