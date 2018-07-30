@@ -164,7 +164,7 @@ for index, freq in enumerate(FREQS):
     logger.log(logging.INFO, gpcopy)
 
     # Flag the actual science data
-    # mu.mosaic_pgflag(mosaic)
+    mu.mosaic_pgflag(mosaic)
 
     uvsplit = m(f"uvsplit vis={mosaic}").run()
     logger.log(logging.INFO, uvsplit)
