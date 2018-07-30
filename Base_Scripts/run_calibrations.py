@@ -34,14 +34,16 @@ else:
 jobs = []
 
 for day in days:
-    a =[("python3 reduction_7_model.py", day),
-        ("python3 reduction_9_model.py", day)
+    # a =[("python3 reduction_7_model.py", day),
+    #     ("python3 reduction_9_model.py", day)
+    #     ]
+    a =[("python3 reduction_pipeline.py", day),
         ]
     jobs.extend(a)
 
 
 
-pool = Pool(14)
+pool = Pool(10)
 result = pool.map(run, jobs)
 pool.close()
 pool.join()
