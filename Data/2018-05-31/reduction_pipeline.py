@@ -127,6 +127,10 @@ for index, freq in enumerate(FREQS):
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic ").run()
     logger.log(logging.INFO, uvsplit)
 
+    if ifsel == 2:
+        # Extra flagging to ensure IF2 doesnt go crazy with forced model in mfcal
+        mu.calibrator_pgflag(secondary)
+
     # Calibrate the secondary using the flux reference model
     mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
