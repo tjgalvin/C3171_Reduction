@@ -46,16 +46,16 @@ for index, freq in enumerate(FREQS):
                 f"select=source({mu.primary}),source({mu.secondary})").run()
     logger.log(logging.INFO, uvsplit)
 
-    mfcal = m(f"mfcal vis={primary} interval=0.1,0.1,5").run()
-    gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
+    mfcal = m(f"mfcal vis={primary} interval=0.1,0.1,5 refant=4").run()
+    gpcal = m(f"gpcal vis={primary} interval=0.1 refant=4 nfbin={NFBIN} "\
               f"options=xyvary").run()
     logger.log(logging.INFO, mfcal)
     logger.log(logging.INFO, gpcal)
 
     mu.calibrator_pgflag(primary)
 
-    mfcal = m(f"mfcal vis={primary} interval=0.1,0.1,5").run()
-    gpcal = m(f"gpcal vis={primary} interval=0.1 nfbin={NFBIN} "\
+    mfcal = m(f"mfcal vis={primary} interval=0.1,0.1,5 refant=4").run()
+    gpcal = m(f"gpcal vis={primary} interval=0.1 refant=4 nfbin={NFBIN} "\
               f"options=xyvary").run()
     logger.log(logging.INFO, mfcal)
     logger.log(logging.INFO, gpcal)
@@ -63,13 +63,13 @@ for index, freq in enumerate(FREQS):
     gpcopy = m(f"gpcopy vis={primary} out={secondary}").run()
     logger.log(logging.INFO, gpcopy)
 
-    gpcal = m(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} "\
+    gpcal = m(f"gpcal vis={secondary} interval=0.1 refant=4 nfbin={NFBIN} "\
               f"options=xyvary,qusolve").run()
     logger.log(logging.INFO, gpcal)
 
     mu.calibrator_pgflag(secondary)
 
-    gpcal = m(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} "\
+    gpcal = m(f"gpcal vis={secondary} interval=0.1 refant=4 nfbin={NFBIN} "\
               f"options=xyvary,qusolve").run()
     logger.log(logging.INFO, gpcal)
 
@@ -132,8 +132,8 @@ for index, freq in enumerate(FREQS):
         mu.calibrator_pgflag(secondary)
 
     # Calibrate the secondary using the flux reference model
-    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5").run()
-    gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
+    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5 refant=4").run()
+    gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} refant=4 interval=0.1 "\
                "options=xyvary,qusolve").run()
     logger.log(logging.INFO, mfcal)
     logger.log(logging.INFO, gpcal)
@@ -141,8 +141,8 @@ for index, freq in enumerate(FREQS):
     mu.calibrator_pgflag(secondary)
 
     # Calibrate the secondary using the flux reference model
-    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5").run()
-    gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
+    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5 refant=4").run()
+    gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} refant=4 interval=0.1 "\
                "options=xyvary,qusolve").run()
     logger.log(logging.INFO, mfcal)
     logger.log(logging.INFO, gpcal)
