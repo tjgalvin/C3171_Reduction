@@ -10,13 +10,17 @@ In this repository I will aim to add a folder for each day. The example script i
 
 These are some miriad utilities used throughout the calibration stages. It contains known rfi channels to flag across both IFs/time and hard codes the primary and secondary flux calibrator names. 
 
-It also implements a class to help run and manage miriad tasks. It subclasses string and adds a few methods to make it callable and return attribute properties of the miriad task (eg. invert.map or invert.beam)
-
+There is also functionality to use the two CABB IFs to derive a model of the secondary calibrator to be used as a flux reference model, ensuring the two IFs are properly aligned. Initial reduction found that the online Tsys correction can introduce an amplitude offset, which was particuarly troublesome when RFI 'popped' into the tvchan range. This was more a problem for semester one. Semester two (and onwards) used the tvmedian command, making the Tsys more resilient to interference.
 
 ## rpfits_struct.txt
 
 Contains the rpfits file names and their directory structure so that the repository can be regenerated again easily if a complete redownload of raw data is needed. 
 
+## reduction_pipeline.py
+
+The current version of the reduction pipeline applied to each day. During testing it was found that it was best to undo the online Tsys correction when loading data to better calibrate consistently the two CABB IFs. As the two IFs will be used simulatiously to make a single image, extra work is made to ensure that they are consistent. The secondary spectrum is initially calibrated without the online Tsys correction to derive a consistent reference flux model. Mosaic scans will inflate the Tsys measurement for integrations that were less then the desired cycle length (i.e. slewing to a new pointing). Hence, undoing the Tsys correction also means flagging out a significant fraction of the mosaic source data. 
+
+To avoid this, we used the derived secondary spectrum as a flux model for subsequent calibration. This reduction_pipeline.py script implements this two stage procedure. Any day specific options/stages are also implemented in each days script. 
 
 ## model.py 
 
