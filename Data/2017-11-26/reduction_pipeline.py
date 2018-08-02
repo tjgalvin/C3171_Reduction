@@ -61,6 +61,10 @@ for index, freq in enumerate(FREQS):
     gpcopy = m(f"gpcopy vis={primary} out={secondary}").run()
     logger.log(logging.INFO, gpcopy)
 
+    # Extra flagging for secondary
+    if ifsel == 2:
+        mu.calibrator_pgflag(secondary)
+
     gpcal = m(f"gpcal vis={secondary} interval=0.1 nfbin={NFBIN} "\
               f"options=xyvary,qusolve").run()
     logger.log(logging.INFO, gpcal)
@@ -125,6 +129,10 @@ for index, freq in enumerate(FREQS):
     uvsplit = m(f"uvsplit vis={atlod.out} options=mosaic ").run()
     logger.log(logging.INFO, uvsplit)
 
+# Extra flagging for secondary
+    if ifsel == 2:
+        mu.calibrator_pgflag(secondary)
+
     # Calibrate the secondary using the flux reference model
     mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
@@ -135,7 +143,7 @@ for index, freq in enumerate(FREQS):
     mu.calibrator_pgflag(secondary)
 
     # Calibrate the secondary using the flux reference model
-    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1").run()
+    mfcal = m(f"mfcal vis={secondary} flux={mfflux} interval=0.1,0.1,5").run()
     gpcal = m(f"gpcal vis={secondary} nfbin={NFBIN} interval=0.1 "\
                "options=xyvary,qusolve").run()
     logger.log(logging.INFO, mfcal)

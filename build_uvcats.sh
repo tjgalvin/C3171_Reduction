@@ -5,11 +5,11 @@
 # folders and paths. For the moment have to hand tweak values
 
 num_points=195
-outs=./Semester_2_models
+outs=./Semester_2
 for ((p=1;p<=num_points;p++))
 do
-	in7=Data/*/f7700_Model/c3171_$p.7700
-	in9=Data/*/f9500_Model/c3171_$p.9500
+	in7=Data/*/f7700/c3171_$p.7700
+	in9=Data/*/f9500/c3171_$p.9500
 	# in9=''
 	ins="$in7,$in9"
 	# for ((i=1;i<=num_days;i++))
